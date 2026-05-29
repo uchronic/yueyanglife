@@ -44,6 +44,12 @@
     "room-river": IMG_BASE + "room-river.jpg",
   };
 
+  // 商品专属图片（按标题关键词匹配）
+  const PRODUCT_IMAGES = {
+    "五谷养生礼盒": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&h=400&fit=crop",
+    "适老护膝保暖套": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop",
+  };
+
   // ============ 注入图片到封面 ============
   function injectCoverImages() {
     const covers = document.querySelectorAll(".card-cover");
@@ -55,14 +61,26 @@
           el.style.backgroundSize = "cover";
           el.style.backgroundPosition = "center";
           el.style.transition = "transform 0.3s ease";
-          // 添加悬停效果
-          el.closest(".card")?.addEventListener("mouseenter", () => {
-            el.style.transform = "scale(1.02)";
-          });
-          el.closest(".card")?.addEventListener("mouseleave", () => {
-            el.style.transform = "scale(1)";
-          });
           break;
+        }
+      }
+    });
+
+    // 按商品标题匹配图片
+    document.querySelectorAll(".card").forEach((card) => {
+      const title = card.querySelector(".card-title, .detail-title");
+      if (title) {
+        const text = title.textContent.trim();
+        for (const [keyword, imgUrl] of Object.entries(PRODUCT_IMAGES)) {
+          if (text.includes(keyword)) {
+            const cover = card.querySelector(".card-cover");
+            if (cover) {
+              cover.style.backgroundImage = `url('${imgUrl}')`;
+              cover.style.backgroundSize = "cover";
+              cover.style.backgroundPosition = "center";
+            }
+            break;
+          }
         }
       }
     });
